@@ -1,28 +1,23 @@
 class Solution {
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
         int n = nums2.length;
-        int[] nge = new int[n];
+        int negative[]=new int [nums1.length];
+        //Using monotonnic stack and hash map:=
         Stack<Integer> S = new Stack<>();
-
-        // Step 1: Next Greater for nums2
-        for (int i = n - 1; i >= 0; i--) {
-            while (!S.isEmpty() && S.peek() <= nums2[i]) {
-                S.pop();
+        HashMap<Integer,Integer>next=new HashMap<>();
+        for(int i=0;i<nums2.length;i++){
+            while(!S.isEmpty() && nums2[i]>S.peek()){
+                next.put(S.pop(),nums2[i]);
             }
-            nge[i] = S.isEmpty() ? -1 : S.peek();
             S.push(nums2[i]);
         }
-
-        // Step 2: Answer for nums1 (without HashMap)
-        int[] ans = new int[nums1.length];
-        for (int i = 0; i < nums1.length; i++) {
-            for (int j = 0; j < n; j++) {
-                if (nums2[j] == nums1[i]) {
-                    ans[i] = nge[j];
-                    break;
-                }
-            }
+        while(!S.isEmpty()){
+            next.put(S.pop(),-1);
         }
-        return ans;
+        for(int i=0;i<nums1.length;i++){
+           negative[i]=next.get(nums1[i]);
+        }
+        
+        return negative;
     }
 }
