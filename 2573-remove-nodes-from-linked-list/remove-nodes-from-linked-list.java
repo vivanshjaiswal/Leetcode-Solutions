@@ -1,34 +1,26 @@
 class Solution {
-    public ListNode reverse(ListNode head) {
-        ListNode prev = null;
+    public ListNode removeNodes(ListNode head) {
+        Stack<ListNode> stack = new Stack<>();
+
         ListNode curr = head;
 
         while (curr != null) {
-            ListNode next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-        return prev;
-    }
-
-    public ListNode removeNodes(ListNode head) {
-        // Step 1: reverse
-        head = reverse(head);
-
-        int maxSoFar = head.val;
-        ListNode curr = head;
-
-        while (curr != null && curr.next != null) {
-            if (curr.next.val < maxSoFar) {
-                curr.next = curr.next.next;
-            } else {
-                curr = curr.next;
-                maxSoFar = curr.val;
+            while (!stack.isEmpty() && stack.peek().val < curr.val) {
+                stack.pop();
             }
+            stack.push(curr);
+            curr = curr.next;
         }
 
-        // Step 2: reverse again
-        return reverse(head);
+        // rebuild linked list from stack
+        ListNode newHead = null;
+
+        while (!stack.isEmpty()) {
+            ListNode node = stack.pop();
+            node.next = newHead;
+            newHead = node;
+        }
+
+        return newHead;
     }
 }
