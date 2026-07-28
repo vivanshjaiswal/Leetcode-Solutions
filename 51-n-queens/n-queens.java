@@ -1,14 +1,14 @@
 class Solution {
 
     List<List<String>> result = new ArrayList<>();
-
+//yaha maine chess board ko khali se initialize kiya 
     public List<List<String>> solveNQueens(int n) {
         char[][] board = new char[n][n];
 
         for (int i = 0; i < n; i++) {
             Arrays.fill(board[i], '.');
         }
-
+//Solve function ko call krke maine combinations ko array me push kraya hai
         solve(board, 0);
         return result;
     }
