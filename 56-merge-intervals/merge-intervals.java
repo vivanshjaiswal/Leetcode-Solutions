@@ -1,35 +1,40 @@
+
 import java.util.*;
 
 class Solution {
     public int[][] merge(int[][] intervals) {
+        List<int[]> list = new ArrayList<>();
 
-        List<int[]> mergedIntervals = new ArrayList<>();
-
-        if (intervals.length == 0) {
-            return new int[0][];
+        for (int[] interval : intervals) {
+            list.add(new int[]{interval[0], interval[1]});
         }
 
-        // Sort according to start time
-        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        boolean merged = true;
 
-        int[] tempInterval = intervals[0];
+        while (merged) {
+            merged = false;
 
-        for (int[] it : intervals) {
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = i + 1; j < list.size(); j++) {
+                    int[] a = list.get(i);
+                    int[] b = list.get(j);
 
-            // Overlapping interval
-            if (it[0] <= tempInterval[1]) {
-                tempInterval[1] = Math.max(it[1], tempInterval[1]);
-            }
-            // Non-overlapping interval
-            else {
-                mergedIntervals.add(tempInterval);
-                tempInterval = it;
+                    if (a[0] <= b[1] && b[0] <= a[1]) {
+                        a[0] = Math.min(a[0], b[0]);
+                        a[1] = Math.max(a[1], b[1]);
+
+                        list.remove(j);
+                        merged = true;
+                        break;
+                    }
+                }
+
+                if (merged) {
+                    break;
+                }
             }
         }
 
-        // Last interval add karna mat bhoolna
-        mergedIntervals.add(tempInterval);
-
-        return mergedIntervals.toArray(new int[mergedIntervals.size()][]);
+        return list.toArray(new int[list.size()][]);
     }
 }
