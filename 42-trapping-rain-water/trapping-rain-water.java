@@ -1,24 +1,36 @@
-import java.util.*;
-
 class Solution {
     public int trap(int[] height) {
-        int n = height.length;
+
+
+
+//Two Pointer Approach
+
+        int left = 0;
+        int right = height.length - 1;
+
+        int leftMax = 0;
+        int rightMax = 0;
+
         int water = 0;
-        Stack<Integer> heights = new Stack<>();
 
-        for (int i = 0; i < n; i++) {
- while (!heights.isEmpty() && height[i] > height[heights.peek()]) {
-                int top = heights.pop();
+        while (left < right) {
 
-                if (heights.isEmpty()) break;
+            if (height[left] <= height[right]) {
 
-                int left = heights.peek();  
-                int width = i - left - 1;
-    int boundedHeight = Math.min(height[left], height[i]) - height[top];
+                leftMax = Math.max(leftMax, height[left]);
 
-                water += width * boundedHeight;
+                water += leftMax - height[left];
+
+                left++;
+
+            } else {
+
+                rightMax = Math.max(rightMax, height[right]);
+
+                water += rightMax - height[right];
+
+                right--;
             }
-            heights.push(i);
         }
 
         return water;
